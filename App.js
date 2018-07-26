@@ -6,11 +6,24 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  Modal,
+  Image
 } from 'react-native';
 import { RNCamera } from 'react-native-camera';
+import RNFetchBlob from 'rn-fetch-blob'
+
+
+console.disableYellowBox = true;
 
 export default class App extends Component {
+  
+  constructor(props){
+    super(props);
+    this.state = {data:'', modal:false}
+  }
+  
+  
   render() {
     return (
       <View style={styles.container}>
@@ -32,6 +45,15 @@ export default class App extends Component {
             <Text style={{fontSize: 14}}> SNAP </Text>
         </TouchableOpacity>
         </View>
+        <Modal visible={this.state.modal} >
+            <View>
+            <Image
+              style={{width: 600, height: 600}}
+              source={{uri: this.state.data}}
+            />
+            </View>
+        </Modal>
+            
       </View>
     );
   }
@@ -40,7 +62,13 @@ export default class App extends Component {
     if (this.camera) {
       const options = { quality: 0.5, base64: true };
       const data = await this.camera.takePictureAsync(options)
-      console.log(data.uri);
+      console.log(data)                 // DATA ES LA FOTO TOMADA, URI ES LA UBICACION EN CACHE DONDE LA GUARDA
+      this.setState({data:data.uri, modal:true})
+      //console.log(data.uri);
+      /*RNFetchBlob.fs.readFile(data.uri, 'base64')
+      .then((data) => {
+         //console.log(data)
+      })*/
     }
   };
 }
