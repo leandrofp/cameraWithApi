@@ -21,7 +21,48 @@ export default class App extends Component {
   constructor(props){
     super(props);
     this.state = {data:'', modal:false}
+    this.sendImage = this.sendImage.bind(this)
+    this.handleResponse = this.handleResponse.bind(this)
   }
+
+  takePicture = async function() {
+    if (this.camera) {
+      const options = { quality: 0.5, base64: true };
+      const data = await this.camera.takePictureAsync(options)
+      //console.log(data)                 // DATA ES LA FOTO TOMADA, URI ES LA UBICACION EN CACHE DONDE LA GUARDA
+      this.setState({data:data.uri, modal:false})
+      const a =(this.sendImage(data))
+      console.log(a)
+    }
+  }
+
+  async sendImage(data){
+       
+    var params = {
+      "data": data , 
+    }
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params)
+    };
+
+    return await fetch('http://192.168.101.249:8080/mainController/a' /*, requestOptions*/ ).then(this.handleResponse) // NO ANDA LOCALHOST USAR IP MAQUINA
+  }
+
+  handleResponse(response) {
+    console.log("entre")
+    if (!response.ok) {
+        
+        if(response.status == 403)
+            return Promise.reject("SIN_PERMISOS");  // retorna "SIN_PERMISOS"
+        return Promise.reject(response.statusText); // retorna cadena vacia
+    }
+    return response.json();
+  }
+
   
   
   render() {
@@ -58,20 +99,11 @@ export default class App extends Component {
     );
   }
 
-  takePicture = async function() {
-    if (this.camera) {
-      const options = { quality: 0.5, base64: true };
-      const data = await this.camera.takePictureAsync(options)
-      console.log(data)                 // DATA ES LA FOTO TOMADA, URI ES LA UBICACION EN CACHE DONDE LA GUARDA
-      this.setState({data:data.uri, modal:true})
-      //console.log(data.uri);
-      /*RNFetchBlob.fs.readFile(data.uri, 'base64')
-      .then((data) => {
-         //console.log(data)
-      })*/
-    }
-  };
+
+
 }
+
+  
 
 const styles = StyleSheet.create({
   container: {
