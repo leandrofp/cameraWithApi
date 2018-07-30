@@ -31,27 +31,31 @@ export default class App extends Component {
       const data = await this.camera.takePictureAsync(options)
       //console.log(data)                 // DATA ES LA FOTO TOMADA, URI ES LA UBICACION EN CACHE DONDE LA GUARDA
       this.setState({data:data.uri, modal:false})
-      const a =(this.sendImage(data))
-      //console.log(a)
+      
+      const a =(this.sendImage(data.base64))
+      
     }
   }
 
   /*async*/ sendImage(data){
        
+
+    /* envio el texto base64 plano, sin formato json */
     var params = {
-      "data": data , 
+      data, 
     }
+    //console.log(data)
     const requestOptions = {
-      method: 'GET',
-      headers: {
+      method: 'POST',
+      /*headers: {
         'Content-Type': 'application/json',
-      },
-      //body: JSON.stringify(params)
+      },*/
+      body: data,
     };
 
-    return /*await*/ fetch('http://192.168.101.249:8080/savePhoto' , requestOptions ).then(this.handleResponse) // NO ANDA LOCALHOST USAR IP MAQUINA
-    //return /*await*/ fetch('http://192.168.101.249:8090/api/monitorLogistica/savePhoto' , requestOptions ).then(this.handleResponse) // NO ANDA LOCALHOST USAR IP MAQUINA
-  }
+    return /*await*/ fetch('http://192.168.101.249:8080/savePhoto' , requestOptions )//.then(this.handleResponse) // NO ANDA LOCALHOST USAR IP MAQUINA
+    
+    }
 
   handleResponse(response) {
     console.log("entre")
