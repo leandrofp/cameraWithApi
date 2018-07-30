@@ -32,32 +32,30 @@ export default class App extends Component {
       //console.log(data)                 // DATA ES LA FOTO TOMADA, URI ES LA UBICACION EN CACHE DONDE LA GUARDA
       this.setState({data:data.uri, modal:false})
       const a =(this.sendImage(data))
-      console.log(a)
+      //console.log(a)
     }
   }
 
-  async sendImage(data){
+  /*async*/ sendImage(data){
        
     var params = {
       "data": data , 
     }
     const requestOptions = {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(params)
+      //body: JSON.stringify(params)
     };
 
-    return await fetch('http://192.168.101.249:8080/mainController/a' /*, requestOptions*/ ).then(this.handleResponse) // NO ANDA LOCALHOST USAR IP MAQUINA
+    return /*await*/ fetch('http://192.168.101.249:8080/savePhoto' , requestOptions ).then(this.handleResponse) // NO ANDA LOCALHOST USAR IP MAQUINA
+    //return /*await*/ fetch('http://192.168.101.249:8090/api/monitorLogistica/savePhoto' , requestOptions ).then(this.handleResponse) // NO ANDA LOCALHOST USAR IP MAQUINA
   }
 
   handleResponse(response) {
     console.log("entre")
     if (!response.ok) {
-        
-        if(response.status == 403)
-            return Promise.reject("SIN_PERMISOS");  // retorna "SIN_PERMISOS"
         return Promise.reject(response.statusText); // retorna cadena vacia
     }
     return response.json();
