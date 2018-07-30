@@ -11,7 +11,7 @@ import {
   Image
 } from 'react-native';
 import { RNCamera } from 'react-native-camera';
-import RNFetchBlob from 'rn-fetch-blob'
+
 
 
 console.disableYellowBox = true;
@@ -53,7 +53,8 @@ export default class App extends Component {
       body: data,
     };
 
-    return /*await*/ fetch('http://192.168.101.249:8080/savePhoto' , requestOptions )//.then(this.handleResponse) // NO ANDA LOCALHOST USAR IP MAQUINA
+    return /*await*/ fetch('http://27057e82.ngrok.io/savePhoto' , requestOptions )//.then(this.handleResponse) // NO ANDA LOCALHOST USAR IP MAQUINA
+    //return /*await*/ fetch('http://192.168.101.249:8080/savePhoto' , requestOptions )//.then(this.handleResponse) // NO ANDA LOCALHOST USAR IP MAQUINA
     
     }
 
